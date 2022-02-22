@@ -1,15 +1,22 @@
 name: Linting
 
-on: [push]
+on: [push,pull_request]
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: ruby/setup-ruby@477b21f02be01bcb8030d50f37cfec92bfa615b6
-        with:
-          ruby-version: 3.0.2
-      - run: bundle install
-      - name: Rubocop
-        run: rubocop
+    - uses: actions/checkout@v2
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.0.2
+
+    - name: Install dependencies
+      run: make install
+
+    - name: Run Rubocop
+      run: make lint
+
+    - name: Run test
+      run: make test
