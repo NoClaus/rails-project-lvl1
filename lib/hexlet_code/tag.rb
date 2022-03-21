@@ -2,14 +2,12 @@
 
 module HexletCode
   class Tag
-    def self.build(name, options = {})
+    def self.build(tag, options = {})
       single_tags = %w[input br img]
-      return "<#{name}>" if options.empty?
+      rendered_options = render_tag_options(options) unless options.empty?
+      return "<#{tag} #{rendered_options}>" if single_tags.include? tag
 
-      rendered_options = render_tag_options(options)
-      return "<#{name} #{rendered_options}>" if single_tags.include? name
-
-      "<#{name} #{rendered_options}>#{yield}</#{name}>"
+      "<#{tag} #{rendered_options}>#{yield}</#{tag}>"
     end
 
     def self.render_tag_options(options)

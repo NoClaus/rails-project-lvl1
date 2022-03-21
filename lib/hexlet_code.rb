@@ -1,26 +1,17 @@
 # frozen_string_literal: true
 
-require_relative 'hexlet_code/version'
-
-# This module generates html forms
 module HexletCode
-  # frozen_string_literal: true
+  autoload :Form, 'hexlet_code/form.rb'
+  autoload :FormBuilder, 'hexlet_code/form_builder.rb'
+  autoload :Inputs, 'hexlet_code/inputs.rb'
+  autoload :Label, 'hexlet_code/label.rb'
+  autoload :Tag, 'hexlet_code/tag.rb'
+  autoload :VERSION, 'hexlet_code/version.rb'
 
-module HexletCode
-  autoload :VERSION, 'hexlet_code/version'
-  autoload :HexletCodeError, 'hexlet_code/error'
-  autoload :Tag, 'hexlet_code/tag'
-  autoload :Form, 'hexlet_code/form'
-
-  class << self
-    def form_for(data, url: '#', method: 'post', &block)
-      raise HexletCodeError, 'Block is empty' if block.nil?
-
-      form = Form.new(form_attrs: { method: method, action: url }, data: data)
-      block&.call(form)
-
-      form.render
-    end
+  def self.form_for(entity, hash = {})
+    form = Form.new(hash)
+    form_builder = FormBuilder.new(form, entity)
+    yield(form_builder)
+    form_builder.build
   end
-end
 end
